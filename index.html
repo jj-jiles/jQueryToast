@@ -1,0 +1,53 @@
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		
+		<title>Example of jQuery Modal</title> 
+		<link rel="stylesheet" type="text/css" href="normalize.css" />
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+		<link rel="stylesheet" type="text/css" href="forms.css" />
+		
+	</head>
+	<body>
+		<header>
+			<h1>Example of jQuery Toast</h1>
+		</header>
+		<section id="wrapper">
+			<section id="container">
+				<h2>Simple Toast with default text</h2>
+				<div id="wheres-my-toast" class="toasted-container"></div>
+
+				<ul>
+					<li><label>Enter custom Toast text: </label><input type="text" id="customToastText" value="go ahead...try me!" class="two" /> &nbsp; <input type="button" value="display toast" id="customToastButton" class="ui-button normal" /></li>
+					<li><label>Destory the toast</label><input type="button" value="destroy toast" id="destroyToastButton" class="ui-button normal" /></li>
+				</ul>
+
+			</section>
+		</section>
+		<div id="loading-container-bottom"></div>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script type="text/javascript" src="jquery.toast.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			var _toaster = $('#wheres-my-toast');
+
+			_toaster.toast();
+
+			var toastTime = window.setTimeout(function() {
+				_toaster.toast('remove');
+			}, 5000);
+
+			$('#customToastButton').click(function() {
+				window.clearTimeout(toastTime);
+				_toaster.toast({ text : $('#customToastText').val() });
+			});
+
+			$('#destroyToastButton').click(function() {
+				_toaster.toast('remove');
+			})
+
+		});
+		</script>
+	</body>
+</html>
