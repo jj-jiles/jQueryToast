@@ -8,7 +8,8 @@
 
 	var options  = {};
 	var defaults = {
-		text : '...loading'
+		text : '...loading',
+		spinner : true
 	};
 	
 
@@ -36,6 +37,7 @@
 
 		display : function(objOptions) {
 
+			defaults.spinner = true;
 			methods.init(objOptions);
 
 			options.caller = $(this);
@@ -57,8 +59,10 @@
 			var _height = _this.outerHeight();
 			var x_pos   = _this.offset().left;
 			var y_pos   = _this.offset().top;
+
+			var _class = (!options.spinner) ? '' : ' class="toast-spinner"';
 			
-			$('body').append('<div id="toast">' + options.text + '</div>');
+			$('body').append('<div id="toast"' + _class + '>' + options.text + '</div>');
 
 			loadWidth = $('#toast').outerWidth();
 			loadHeight = $('#toast').outerHeight();

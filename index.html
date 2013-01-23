@@ -20,6 +20,7 @@
 
 				<ul>
 					<li><label>Enter custom Toast text: </label><input type="text" id="customToastText" value="go ahead...try me!" class="two" /> &nbsp; <input type="button" value="display toast" id="customToastButton" class="ui-button normal" /></li>
+					<li><label>Without Spinner</label><input type="button" value="show me!!" id="spinnerToastButton" class="ui-button normal" /> (set to disappear after 5 seconds)</li>
 					<li><label>Destory the toast</label><input type="button" value="destroy toast" id="destroyToastButton" class="ui-button normal" /></li>
 				</ul>
 
@@ -31,21 +32,34 @@
 		<script type="text/javascript">
 		$(document).ready(function() {
 			var _toaster = $('#wheres-my-toast');
+			var toastTime;
 
 			_toaster.toast();
 
-			var toastTime = window.setTimeout(function() {
-				_toaster.toast('remove');
-			}, 5000);
+			toastTimeout();
 
 			$('#customToastButton').click(function() {
 				window.clearTimeout(toastTime);
 				_toaster.toast({ text : $('#customToastText').val() });
 			});
 
+			$('#spinnerToastButton').click(function() {
+				window.clearTimeout(toastTime);
+				_toaster.toast({
+					spinner : false
+				});
+				toastTimeout();
+			})
+
 			$('#destroyToastButton').click(function() {
 				_toaster.toast('remove');
-			})
+			});
+
+			function toastTimeout() {
+				toastTime = window.setTimeout(function() {
+					_toaster.toast('remove');
+				}, 5000);
+			}
 
 		});
 		</script>
