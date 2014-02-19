@@ -8,8 +8,7 @@
 
 	var options  = {};
 	var defaults = {
-		text : '...loading',
-		spinner : true
+		text : '...loading'
 	};
 	
 
@@ -35,37 +34,33 @@
 		},
 
 
-		display : function(objOptions) {
+		display : function(objOptions, callback) {
 
-			defaults.spinner = true;
 			methods.init(objOptions);
 
-			options.caller = $(this);
+			var _this = $(this);
 
-			if ( $('#toast').is(':visible') ) {
-				$('#toast').fadeOut('fast', function() {
-					$('#toast').remove();
-					methods.drawToast();
-				});
+			if ( _this.is('body') ) {
+				var _width = $(window).width();
+				var _height = $(window).height();
+				var x_pos = 0;
+				var y_pos = 0;
 			} else {
-				methods.drawToast();
+				var _width  = _this.outerWidth();
+				var _height = _this.outerHeight();
+				var x_pos   = _this.offset().left;
+				var y_pos   = _this.offset().top;				
 			}
-		},
 
-		drawToast : function() {
-			var _this = options.caller;
+			var ts_id = Math.round((new Date()).getTime() / 1000);
+				ts_id += Math.ceil(Math.random()*1000);
 
-			var _width  = _this.outerWidth();
-			var _height = _this.outerHeight();
-			var x_pos   = _this.offset().left;
-			var y_pos   = _this.offset().top;
+			var html = '<div id="' + ts_id + '" class="toaster"><div class="toaster-inner">' + options.text + '</div></div>'
 
-			var _class = (!options.spinner) ? '' : ' class="toast-spinner"';
-			
-			$('body').append('<div id="toast"' + _class + '>' + options.text + '</div>');
+			$('body').append(html);
 
-			loadWidth = $('#toast').outerWidth();
-			loadHeight = $('#toast').outerHeight();
+			loadWidth = $('.toaster').outerWidth();
+			loadHeight = $('.toaster').outerHeight();
 
 			x_pos = Math.floor((x_pos+(_width/2))-(loadWidth/2));
 			y_pos = Math.floor((y_pos+(_height/2))-(loadHeight/2));
@@ -78,15 +73,28 @@
 				'visibility' : 'visible'
 			};
 
-			$('#toast').css(a_css).fadeIn('fast');
+			$('#' + ts_id)
+				.css(a_css)
+				.fadeIn(150, function() {
+					if ( typeof callback === 'function' ) {
+						callback();
+					}
+				});
+		},
+
+		moveLeft : function(bar) {
+			bar.animate({ 'left' : '-' + methods.barWidth + 'px' }, 1000, 'easeOutCubic', function() { methods.moveRight( $(this) ); } );
+		},
+
+		moveRight : function(bar) {
+			bar.animate({ 'left' : (loadWidth+5) + 'px' }, 1000, 'easeOutCubic', function() { methods.moveLeft( $(this) ); } );
 		},
 
 
 		remove : function() {
-			$('#toast').fadeOut('fast', function() {
-				$('#toast').remove();
+			$('.toaster').fadeOut('fast', function() {
+				$(this).remove();
 			});
-			return $this;
 		}
 
 	};
@@ -104,5 +112,14 @@
 
 	};
 
+})( jQuery );
 
+(function( $ ) {
+	$.toast = function( method ) {
+		if ( method == 'remove' ) {
+			$('.toaster').fadeOut('fast', function() {
+				$('.toaster').remove();
+			});			
+		}
+	}
 })( jQuery );
